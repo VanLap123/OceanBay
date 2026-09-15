@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocean Bay Phu Quoc - Sơ Đồ Vị Trí Bàn (Table Location Guide)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+   <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandOrange: '#FF6B00',
+                        brandTeal: '#0E5A5C',
+                        brandBg: '#F8F6EF',
+                        catStandard: '#2563EB',
+                        catVipO: '#38BDF8',
+                        catVipBI: '#475569',
+                        catVipNC: '#9333EA',
+                        facilityBar: '#0F172A',
+                        facilityMermaid: '#99F6E4'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Hiệu ứng vòng tròn lan tỏa cho nút nhạc */
+@keyframes pulse-ring {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.35); opacity: 0.3; }
+    100% { transform: scale(1.65); opacity: 0; }
+}
+
+.music-pulse-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 50;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background-color: #FF6B00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.music-pulse-btn::before,
+.music-pulse-btn::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 50%;
+    background-color: #FF6B00;
+    z-index: -1;
+    animation: pulse-ring 2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.music-pulse-btn::after {
+    animation-delay: 1s;
+}
+
+.music-pulse-btn:hover {
+    transform: scale(1.1);
+}
+
+.music-pulse-btn.paused {
+    background-color: #64748B;
+}
+.music-pulse-btn.paused::before,
+.music-pulse-btn.paused::after {
+    background-color: #64748B;
+    animation: none;
+}
+        body {
+            background-color: #F4F1EA;
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            overflow-x: hidden;
+        }
+        .tbl-btn {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 11px;
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .tbl-btn:hover {
+            transform: scale(1.15);
+            z-index: 50;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.35);
+            outline: 2px solid #FF6B00;
+        }
+        .tbl-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Responsive Auto-Scaling Floor Plan Wrapper */
+        .floor-plan-viewport {
+            width: 100%;
+            max-width: 1020px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 1040px) {
+            .floor-plan-viewport {
+                height: calc(1020px * var(--scale, 1));
+            }
+            .floor-plan-scaler {
+                transform-origin: top left;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800 antialiased">
+
+    <header class="bg-brandTeal text-white shadow-md sticky top-0 z-40 border-b-4 border-brandOrange">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <!-- Logo Image -->
+                <div class="bg-white w-10 h-10 rounded-xl overflow-hidden shadow-inner flex items-center justify-center border border-brandOrange/30">
+                    <img src="images/logo.png" alt="Ocean Bay Logo" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h1 class="font-serif text-base sm:text-xl font-bold tracking-wide text-amber-50 leading-tight">OCEAN BAY</h1>
+                    <p class="text-[9px] sm:text-[10px] text-amber-200/80 tracking-widest uppercase">Resort & Spa • Phu Quoc</p>
+                </div>
+            </div>
+            
+            <div class="text-right">
+                <span class="inline-block bg-brandOrange/20 border border-brandOrange/50 text-amber-300 text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-medium">
+                    Ocean Bar & Grill
+                </span>
+                <p class="text-[9px] sm:text-[10px] text-slate-300 mt-0.5">Table Location Guide</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-2 sm:p-4 flex flex-col items-center">
+        
+        <!-- TITLE & SUBTITLE -->
+        <div class="text-center my-2 sm:my-3">
+            <h2 class="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-brandTeal uppercase tracking-wider">SƠ ĐỒ VỊ TRÍ BÀN</h2>
+            <p class="text-[10px] sm:text-xs font-semibold text-brandOrange tracking-widest uppercase mt-0.5">OCEAN BAR & GRILL • PHÚ QUỐC, VIỆT NAM</p>
+            <p class="text-[11px] text-slate-500 mt-1">Press on the table to view imformation and book / Nhấn vào bàn để xem thông tin và đặt bàn</p>
+        </div>
+
+        <!-- LEGEND / PHÂN LOẠI BÀN -->
+        <div class="w-full bg-white rounded-xl p-3 shadow-sm border border-slate-200 mb-3 max-w-[1020px]">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-[11px]">
+                <!-- Standard -->
+                <div class="flex items-center space-x-2 p-1 rounded-lg hover:bg-slate-50">
+                    <div class="w-4 h-4 rounded bg-catStandard flex-shrink-0 shadow-sm"></div>
+                    <div>
+                        <div class="font-bold text-slate-800">STANDARD</div>
+                        <div class="text-[9px] text-slate-500">no table surcharge</div>
+                    </div>
+                </div>
+                <!-- VIP O -->
+                <div class="flex items-center space-x-2 p-1 rounded-lg hover:bg-slate-50">
+                    <div class="w-6 h-3.5 rounded bg-catVipO flex-shrink-0 shadow-sm"></div>
+                    <div>
+                        <div class="font-bold text-slate-800">VIP O</div>
+                        <div class="text-[9px] text-slate-500">500,000 VNĐ / table</div>
+                    </div>
+                </div>
+                <!-- VIP B & I -->
+                <div class="flex items-center space-x-2 p-1 rounded-lg hover:bg-slate-50">
+                    <div class="w-4 h-4 rounded-full bg-catVipBI flex-shrink-0 shadow-sm"></div>
+                    <div>
+                        <div class="font-bold text-slate-800">VIP B & I</div>
+                        <div class="text-[9px] text-slate-500">800,000 VNĐ / table</div>
+                    </div>
+                </div>
+                <!-- VIP N & C -->
+                <div class="flex items-center space-x-2 p-1 rounded-lg hover:bg-slate-50">
+                    <div class="w-4 h-4 rounded bg-catVipNC flex-shrink-0 shadow-sm"></div>
+                    <div>
+                        <div class="font-bold text-slate-800">VIP N & C</div>
+                        <div class="text-[9px] text-slate-500">1,000,000 VNĐ / table</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FLOOR PLAN CONTAINER WITH AUTO-SCALING ON MOBILE -->
+        <div class="floor-plan-viewport" id="floorPlanViewport">
+            <div class="floor-plan-scaler" id="floorPlanScaler" style="width: 1000px; height: 820px; background-color: #FAF8F5;" class="relative rounded-3xl border-2 border-slate-200 shadow-xl p-4 overflow-hidden">
+                
+                <!-- Inner Layout Content -->
+                <div class="absolute inset-0 p-4">
+                    <!-- SEA SUNSET VIEW HEADER -->
+                    <div class="absolute top-4 left-10 right-10 flex items-center justify-center">
+                        <div class="h-[1px] bg-slate-300 flex-grow"></div>
+                        <span class="px-6 text-xs font-bold tracking-widest text-slate-400 uppercase">SEA • SUNSET VIEW</span>
+                        <div class="h-[1px] bg-slate-300 flex-grow"></div>
+                    </div>
+
+                    <!-- ================= AREA O & I ================= -->
+                    <div class="absolute top-[236px] left-6 w-[430px] h-[190px] bg-[#ECEBE3]/60 rounded-2xl border border-gray-200/80 p-3">
+                        <span class="text-[11px] font-bold text-slate-400 tracking-wider block mb-2">AREA O • I</span>
+                        
+                        <!-- Row O (O1 -> O7) -->
+                        <div class="flex gap-2 mb-4">
+                            <button onclick="selectTable('O1')" id="btn-O1" class="tbl-btn bg-catVipO w-12 h-7 rounded-lg">O1</button>
+                            <button onclick="selectTable('O2')" id="btn-O2" class="tbl-btn bg-catVipO w-12 h-7 rounded-lg">O2</button>
+                            <button onclick="selectTable('O3')" id="btn-O3" class="tbl-btn bg-catVipO w-12 h-7 rounded-lg">O3</button>
+                            <button onclick="selectTable('O4')" id="btn-O4" class="tbl-btn bg-catVipO w-12 h-7 rounded-lg">O4</button>
+                            <button onclick="selectTable('O5')" id="btn-O5" class="tbl-btn bg-catVipO w-12 h-7 rounded-lg">O5</button>
+                            <button onclick="selectTable('O6')" id="btn-O6" class="tbl-btn bg-catVipO w-12 h-7 rounded-lg">O6</button>
+                            <button onclick="selectTable('O7')" id="btn-O7" class="tbl-btn bg-catVipO w-12 h-7 rounded-lg">O7</button>
+                        </div>
+
+                        <!-- Row I (I1 -> I4) -->
+                        <div class="flex justify-around px-8 mt-6">
+                            <button onclick="selectTable('I1')" id="btn-I1" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full">I1</button>
+                            <button onclick="selectTable('I2')" id="btn-I2" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full">I2</button>
+                            <button onclick="selectTable('I3')" id="btn-I3" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full">I3</button>
+                            <button onclick="selectTable('I4')" id="btn-I4" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full">I4</button>
+                        </div>
+                    </div>
+
+                    <!-- ================= AREA S & T ================= -->
+                    <div class="absolute top-[403px] left-6 w-[620px] h-[225px] bg-[#ECEBE3]/60 rounded-2xl border border-gray-200/80 p-3">
+                        <span class="text-[11px] font-bold text-slate-400 tracking-wider block mb-2">AREA S • T</span>
+                        
+                        <!-- Row S (S1 -> S10) -->
+                        <div class="flex gap-1.5 mb-2">
+                            <button onclick="selectTable('S1')" id="btn-S1" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S1</button>
+                            <button onclick="selectTable('S2')" id="btn-S2" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S2</button>
+                            <button onclick="selectTable('S3')" id="btn-S3" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S3</button>
+                            <button onclick="selectTable('S4')" id="btn-S4" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S4</button>
+                            <button onclick="selectTable('S5')" id="btn-S5" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S5</button>
+                            <button onclick="selectTable('S6')" id="btn-S6" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S6</button>
+                            <button onclick="selectTable('S7')" id="btn-S7" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S7</button>
+                            <button onclick="selectTable('S8')" id="btn-S8" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S8</button>
+                            <button onclick="selectTable('S9')" id="btn-S9" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S9</button>
+                            <button onclick="selectTable('S10')" id="btn-S10" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S10</button>
+                        </div>
+
+                        <!-- Row T (T8 -> T16) + S11 -> S13 -->
+                        <div class="flex gap-1.5 mb-2">
+                            <button onclick="selectTable('T8')" id="btn-T8" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T8</button>
+                            <button onclick="selectTable('T9')" id="btn-T9" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T9</button>
+                            <button onclick="selectTable('T10')" id="btn-T10" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T10</button>
+                            <button onclick="selectTable('T11')" id="btn-T11" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T11</button>
+                            <button onclick="selectTable('T12')" id="btn-T12" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T12</button>
+                            <button onclick="selectTable('T13')" id="btn-T13" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T13</button>
+                            <button onclick="selectTable('T14')" id="btn-T14" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T14</button>
+                            <button onclick="selectTable('T15')" id="btn-T15" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T15</button>
+                            <button onclick="selectTable('T16')" id="btn-T16" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T16</button>
+                            <button onclick="selectTable('S11')" id="btn-S11" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S11</button>
+                            <button onclick="selectTable('S12')" id="btn-S12" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S12</button>
+                            <button onclick="selectTable('S13')" id="btn-S13" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">S13</button>
+                        </div>
+
+                        <!-- Row T Front (T1 -> T4) -->
+                        <div class="flex gap-1.5 mb-2">
+                            <button onclick="selectTable('T1')" id="btn-T1" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T1</button>
+                            <button onclick="selectTable('T2')" id="btn-T2" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T2</button>
+                            <button onclick="selectTable('T3')" id="btn-T3" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T3</button>
+                            <button onclick="selectTable('T4')" id="btn-T4" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T4</button>
+                        </div>
+
+                        <!-- Bottom S Extra (T5, T6, T7) -->
+                        <div class="flex gap-1.5 ml-[60px]">
+                            <button onclick="selectTable('T5')" id="btn-T5" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T5</button>
+                            <button onclick="selectTable('T6')" id="btn-T6" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T6</button>
+                            <button onclick="selectTable('T7')" id="btn-T7" class="tbl-btn bg-catStandard w-[37px] h-8 rounded">T7</button>
+                        </div>
+                    </div>
+
+                    <!-- ================= BAR & KITCHEN & RESTROOM ================= -->
+                    <!-- BAR -->
+                    <div class="absolute top-[638px] left-[220px] w-[110px] h-[36px] bg-facilityBar rounded-lg flex flex-col items-center justify-center text-white text-[10px] font-bold shadow">
+                        <span>BAR</span>
+                        <span class="text-[9px] font-normal text-slate-300">QUẦY BAR</span>
+                    </div>
+
+                    <!-- KITCHEN -->
+                    <div class="absolute top-[638px] left-[340px] w-[300px] h-[50px] bg-facilityBar rounded-xl flex items-center justify-center text-white text-xs font-bold space-x-2 shadow">
+                        <span>KITCHEN</span>
+                        <span class="text-slate-400">•</span>
+                        <span class="text-slate-200">BẾP</span>
+                    </div>
+
+                    <!-- RESTROOM -->
+                    <div class="absolute top-[693px] left-[210px] w-[130px] h-[36px] bg-gray-200 border border-slate-300 rounded-lg flex flex-col items-center justify-center text-slate-700 text-[10px] font-bold">
+                        <span>RESTROOM</span>
+                        <span class="text-[9px] font-normal text-slate-500">NHÀ VỆ SINH</span>
+                    </div>
+
+                    <!-- ================= MERMAID STAGE ================= -->
+                    <div class="absolute top-12 left-[590px] w-[65px] h-[75px] bg-facilityMermaid border border-teal-200 rounded-2xl flex items-center justify-center text-xs font-serif font-bold text-teal-900 shadow-sm">
+                        Mermaid
+                    </div>
+
+                    <!-- ================= AREA N ================= -->
+                    <div class="absolute top-[310px] left-[515px] w-[205px] h-[80px] bg-[#ECEBE3]/60 rounded-xl border border-gray-200 p-2 z-20 flex flex-col justify-between">
+                        <span class="text-[10px] font-bold text-slate-400 tracking-wider">AREA N</span>
+                        <div class="flex gap-2">
+                            <button onclick="selectTable('N3')" id="btn-N3" data-cat="VIP_NC" class="tbl-btn bg-catVipNC w-9 h-8 rounded">N3</button>
+                            <button onclick="selectTable('N4')" id="btn-N4" data-cat="VIP_NC" class="tbl-btn bg-catVipNC w-9 h-8 rounded">N4</button>
+                            <button onclick="selectTable('N5')" id="btn-N5" data-cat="VIP_NC" class="tbl-btn bg-catVipNC w-9 h-8 rounded">N5</button>
+                            <button onclick="selectTable('N6')" id="btn-N6" data-cat="VIP_NC" class="tbl-btn bg-catVipNC w-9 h-8 rounded">N6</button>
+                        </div>
+                    </div>
+
+                    <!-- N2 & N1 Vertical stacked inside Area N -->
+                    <div class="absolute top-[395px] left-[523px] flex flex-col gap-1.5 z-20">
+                        <button onclick="selectTable('N2')" id="btn-N2" data-cat="VIP_BI" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full">N2</button>
+                        <button onclick="selectTable('N1')" id="btn-N1" data-cat="VIP_BI" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full">N1</button>
+                    </div>
+
+                    <!-- ================= AREA B - C ================= -->
+                    <div class="absolute top-12 left-[700px] w-[270px] h-[370px] bg-[#ECEBE3]/60 rounded-2xl border border-gray-200/80 p-3">
+                        <span class="text-[11px] font-bold text-slate-400 tracking-wider block mb-1">AREA B • C</span>
+                        
+                        <!-- B8 to B1 Center-Right Column Layout -->
+                        <div class="relative w-full h-[320px]">
+                            <button onclick="selectTable('B8')" id="btn-B8" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full absolute top-[5px] left-[100px]">B8</button>
+                            <button onclick="selectTable('B7')" id="btn-B7" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full absolute top-[45px] left-[100px]">B7</button>
+                            <button onclick="selectTable('B6')" id="btn-B6" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full absolute top-[85px] left-[100px]">B6</button>
+                            <button onclick="selectTable('B5')" id="btn-B5" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full absolute top-[125px] left-[100px]">B5</button>
+                            
+                            <button onclick="selectTable('B4')" id="btn-B4" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full absolute top-[165px] left-[140px]">B4</button>
+                            <button onclick="selectTable('B3')" id="btn-B3" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full absolute top-[185px] left-[100px]">B3</button>
+                            <button onclick="selectTable('B2')" id="btn-B2" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full absolute top-[225px] left-[140px]">B2</button>
+                            <button onclick="selectTable('B1')" id="btn-B1" class="tbl-btn bg-catVipBI w-9 h-9 rounded-full absolute top-[245px] left-[100px]">B1</button>
+
+                            <button onclick="selectTable('C6')" id="btn-C6" class="tbl-btn bg-catVipNC w-9 h-8 rounded absolute top-[45px] left-[190px]">C6</button>
+                            <button onclick="selectTable('C5')" id="btn-C5" class="tbl-btn bg-catVipNC w-9 h-8 rounded absolute top-[95px] left-[190px]">C5</button>
+                            <button onclick="selectTable('C4')" id="btn-C4" class="tbl-btn bg-catVipNC w-9 h-8 rounded absolute top-[165px] left-[60px]">C4</button>
+                            <button onclick="selectTable('C3')" id="btn-C3" class="tbl-btn bg-catVipNC w-9 h-8 rounded absolute top-[185px] left-[190px]">C3</button>
+                            <button onclick="selectTable('C2')" id="btn-C2" class="tbl-btn bg-catVipNC w-9 h-8 rounded absolute top-[225px] left-[60px]">C2</button>
+                            <button onclick="selectTable('C1')" id="btn-C1" class="tbl-btn bg-catVipNC w-9 h-8 rounded absolute top-[245px] left-[190px]">C1</button>
+                        </div>
+                    </div>
+
+                    <!-- ================= HOSTESS & ENTRANCE ================= -->
+                    <div class="absolute top-[440px] left-[700px] w-[110px] h-[48px] bg-facilityBar rounded-xl flex flex-col items-center justify-center text-white text-[10px] font-bold shadow">
+                        <span>HOSTESS</span>
+                        <span class="text-[9px] font-normal text-slate-300">ĐÓN KHÁCH</span>
+                    </div>
+
+                    <div class="absolute top-[410px] left-[840px] flex flex-col items-center">
+                        <div class="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[20px] border-b-facilityBar mb-1"></div>
+                        <div class="w-2 h-28 bg-facilityBar rounded-full"></div>
+                        <div class="mt-2 text-[10px] font-bold text-slate-700 tracking-wider flex items-center space-x-1">
+                            <span>ENTRANCE • LỐI VÀO</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL / POPUP DETAILS FOR SELECTED TABLE -->
+    <div id="tableModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden transform transition-all scale-95 opacity-0 duration-200" id="modalCard">
+            
+            <!-- Modal Header -->
+            <div class="bg-brandTeal text-white px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <span id="modalTableBadge" class="bg-brandOrange text-white text-xs font-bold px-2.5 py-1 rounded-md">BÀN O1</span>
+                    <h3 id="modalTableTitle" class="font-serif font-bold text-lg">Khu Vực VIP O</h3>
+                </div>
+                <button onclick="closeModal()" class="text-slate-300 hover:text-white text-2xl font-bold focus:outline-none">&times;</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6">
+                <!-- Table Image -->
+                <div class="relative w-full h-48 bg-slate-100 rounded-xl overflow-hidden mb-4 border border-slate-200">
+                    <img id="modalTableImage" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80" alt="Bàn Ocean Bay" class="w-full h-full object-cover">
+                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded backdrop-blur-md">
+                        Mặt biển Sunset View
+                    </div>
+                </div>
+
+                <!-- Information Grid -->
+                <div class="space-y-3 mb-6 text-sm">
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-slate-500">Khu vực (Area):</span>
+                        <span id="modalAreaName" class="font-bold text-slate-800">Area O • I</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-slate-500">Loại bàn (Category):</span>
+                        <span id="modalCategory" class="font-bold text-brandTeal">VIP O</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="text-slate-500">Phụ thu vị trí (Surcharge):</span>
+                        <span id="modalPrice" class="font-bold text-brandOrange text-base">500,000 VNĐ</span>
+                    </div>
+                   <div class="flex justify-between text-xs text-slate-500 pt-1">
+                        <span>Sức chứa/ table size:</span>
+                        <span id="modalCapacity">2 - 3 people / table</span>
+                    </div>
+                </div>
+
+                <!-- Call to action button -->
+                <a id="btnBookNow" href="https://forms.google.com" target="_blank" rel="noopener noreferrer" class="w-full bg-brandOrange hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg flex items-center justify-center space-x-2 transition-all transform hover:-translate-y-0.5">
+                    <span> BOOK NOW / Đặt Bàn Ngay</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER SECTION -->
+    <footer class="bg-brandTeal text-white border-t border-slate-700 mt-auto py-6">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <div class="flex items-center justify-center space-x-2">
+                <span class="font-serif font-bold text-amber-100 tracking-wider">OCEAN BAY RESORT & SPA PHÚ QUỐC</span>
+            </div>
+            <p class="text-xs text-slate-400">Đường Dinh Bà, Ông Lang, TP. Phú Quốc, Kiên Giang, Việt Nam</p>
+            <p class="text-[11px] text-slate-500">© 2026 Ocean Bay Resort & Spa. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT FOR RESPONSIVE SCALING & TABLE INTERACTION -->
+    <script>
+        // Auto scale the floor plan on mobile screens so it fits completely without cutting off
+        function updateFloorPlanScale() {
+            const viewport = document.getElementById('floorPlanViewport');
+            const scaler = document.getElementById('floorPlanScaler');
+            if (!viewport || !scaler) return;
+
+            const baseWidth = 1000;
+            const containerWidth = viewport.clientWidth;
+
+            if (containerWidth < baseWidth) {
+                const scale = containerWidth / baseWidth;
+                scaler.style.transform = `scale(${scale})`;
+                viewport.style.setProperty('--scale', scale);
+                viewport.style.height = (820 * scale) + 'px';
+            } else {
+                scaler.style.transform = 'none';
+                viewport.style.height = '820px';
+            }
+        }
+
+        window.addEventListener('resize', updateFloorPlanScale);
+        window.addEventListener('DOMContentLoaded', updateFloorPlanScale);
+
+        const tableData = {
+            'STANDARD': {
+                categoryName: 'STANDARD',
+                price: 'Miễn phí phụ thu (No surcharge)',
+                image: 'images/mermaid.jpg',
+                link: 'https://forms.gle/g7Equ7K8LXPeMkHg9'
+            },
+            'VIP_O': {
+                categoryName: 'VIP O',
+                price: '500,000 VNĐ / bàn',
+                image: 'images/mermaid.jpg',
+                link: 'https://forms.gle/g7Equ7K8LXPeMkHg9'
+            },
+            'VIP_BI': {
+                categoryName: 'VIP B & I',
+                price: '800,000 VNĐ / bàn',
+                image:'images/mermaid.jpg',
+                link: 'https://forms.gle/g7Equ7K8LXPeMkHg9'
+            },
+            'VIP_NC': {
+                categoryName: 'VIP N & C',
+                price: '1,000,000 VNĐ / bàn',
+                image: 'images/mermaid.jpg',
+                link: 'https://forms.gle/g7Equ7K8LXPeMkHg9'
+            }
+        };
+
+     function getTableInfo(tableId) {
+            let catKey = 'STANDARD';
+            let areaName = 'Area S • T';
+            let capacityText = '2 - 3 people / table'; // Mặc định cho các bàn khác
+
+            if (tableId.startsWith('O')) {
+                catKey = 'VIP_O';
+                areaName = 'Area O • I (Sát biển)';
+            } else if (tableId.startsWith('I')) {
+                catKey = 'VIP_BI';
+                areaName = 'Area O • I';
+                capacityText = '4 - 5 people / table'; // Riêng bàn I hiển thị 4-5 người
+            } else if (tableId.startsWith('B')) {
+                catKey = 'VIP_BI';
+                areaName = 'Area B • C';
+            } else if (tableId.startsWith('C')) {
+                catKey = 'VIP_NC';
+                areaName = 'Area B • C';
+                capacityText = '2 people / table'; // Riêng bàn I hiển thị 4-5 người
+            } else if (tableId.startsWith('N')) {
+                if (tableId === 'N1' || tableId === 'N2') {
+                    catKey = 'VIP_BI';
+                } else {
+                    catKey = 'VIP_NC';
+                }
+                areaName = 'Area N';
+            } else if (tableId.startsWith('S') || tableId.startsWith('T')) {
+                catKey = 'STANDARD';
+                areaName = 'Area S • T';
+            }
+
+            const info = tableData[catKey];
+            return {
+                id: tableId,
+                area: areaName,
+                categoryName: info.categoryName,
+                price: info.price,
+                image: info.image,
+                link: info.link,
+                capacity: capacityText // Truyền thông tin sức chứa đã phân loại
+            };
+        }
+
+        function selectTable(tableId) {
+            const info = getTableInfo(tableId);
+
+            document.getElementById('modalTableBadge').innerText = 'BÀN ' + info.id;
+            document.getElementById('modalTableTitle').innerText = 'Khu Vực ' + info.categoryName;
+            document.getElementById('modalAreaName').innerText = info.area;
+            document.getElementById('modalCategory').innerText = info.categoryName;
+            document.getElementById('modalPrice').innerText = info.price;
+            document.getElementById('modalTableImage').src = info.image;
+            document.getElementById('btnBookNow').href = info.link;
+            
+            // Đẩy giá trị sức chứa tương ứng lên bảng Pop-up
+            document.getElementById('modalCapacity').innerText = info.capacity;
+
+            const modal = document.getElementById('tableModal');
+            const card = document.getElementById('modalCard');
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                card.classList.remove('scale-95', 'opacity-0');
+                card.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('tableModal');
+            const card = document.getElementById('modalCard');
+
+            card.classList.remove('scale-100', 'opacity-100');
+            card.classList.add('scale-95', 'opacity-0');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('tableModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+    <!-- Nút điều khiển nhạc nổi ở góc màn hình -->
+    <button onclick="toggleMusic()" id="musicToggleBtn" class="music-pulse-btn paused" title="Bật/Tắt nhạc nền">
+        <span id="musicIcon" class="text-xl">🔇</span>
+    </button>
+
+    <!-- Thẻ âm thanh chứa bài hát Hello Việt Nam -->
+    <audio id="bgMusic" src="audio/hello-vietnam.mp3" preload="auto" loop></audio>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicToggleBtn');
+        const musicIcon = document.getElementById('musicIcon');
+        let isPlaying = false;
+
+        music.volume = 0.5; // Đặt âm lượng ở mức 50%
+
+        // Hàm Bật / Tắt nhạc trực tiếp khi bấm vào nút
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                musicIcon.innerText = '🔇';
+                musicBtn.classList.add('paused');
+                isPlaying = false;
+            } else {
+                music.play().then(() => {
+                    musicIcon.innerText = '🔊';
+                    musicBtn.classList.remove('paused');
+                    isPlaying = true;
+                }).catch(e => {
+                    console.log("Trình duyệt chặn phát nhạc:", e);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
