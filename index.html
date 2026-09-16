@@ -161,7 +161,7 @@
         
         <!-- TITLE & SUBTITLE -->
         <div class="text-center my-2 sm:my-3">
-            <h2 class="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-brandTeal uppercase tracking-wider">SƠ ĐỒ VỊ TRÍ BÀN</h2>
+            <h2 class="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-brandTeal uppercase tracking-wider">TABLE LAYOUT</h2>
             <p class="text-[10px] sm:text-xs font-semibold text-brandOrange tracking-widest uppercase mt-0.5">OCEAN BAR & GRILL • PHÚ QUỐC, VIỆT NAM</p>
             <p class="text-[11px] text-slate-500 mt-1">Press on the table to view imformation and book / Nhấn vào bàn để xem thông tin và đặt bàn</p>
         </div>
@@ -582,10 +582,10 @@
     </script>
     <!-- Nút điều khiển nhạc nổi ở góc màn hình -->
     <button onclick="toggleMusic()" id="musicToggleBtn" class="music-pulse-btn paused" title="Bật/Tắt nhạc nền">
-        <span id="musicIcon" class="text-xl">🔇</span>
+        <span id="musicIcon" class="text-xl" style="font-size: 1.2rem;">♫</span>
     </button>
 
-    <!-- Thẻ âm thanh chứa bài hát Hello Việt Nam -->
+    <!-- Thẻ âm thanh -->
     <audio id="bgMusic" src="audio/hello-vietnam.mp3" preload="auto" loop></audio>
 
     <script>
@@ -594,13 +594,13 @@
         const musicIcon = document.getElementById('musicIcon');
         let isPlaying = false;
 
-        music.volume = 0.5; // Đặt âm lượng ở mức 50%
+        music.volume = 0.3; // Âm lượng 50%
 
-        // Hàm Bật / Tắt nhạc trực tiếp khi bấm vào nút
+        // Hàm bật/tắt khi bấm vào nút
         function toggleMusic() {
             if (isPlaying) {
                 music.pause();
-                musicIcon.innerText = '🔇';
+                musicIcon.innerText = '♫';
                 musicBtn.classList.add('paused');
                 isPlaying = false;
             } else {
@@ -609,10 +609,25 @@
                     musicBtn.classList.remove('paused');
                     isPlaying = true;
                 }).catch(e => {
-                    console.log("Trình duyệt chặn phát nhạc:", e);
+                    console.log("Trình duyệt chặn:", e);
                 });
             }
         }
+
+        // TỰ ĐỘNG PHÁT NGAY KHI NGƯỜI DÙNG CLICK VÀO BẤT KỲ ĐÂU TRÊN TRANG LẦN ĐẦU TIÊN
+        document.body.addEventListener('click', function unlockAudio() {
+            if (!isPlaying) {
+                music.play().then(() => {
+                    musicIcon.innerText = '🔊';
+                    musicBtn.classList.remove('paused');
+                    isPlaying = true;
+                    // Xóa sự kiện sau khi đã bật thành công để không bị lặp lại
+                    document.body.removeEventListener('click', unlockAudio);
+                }).catch(e => {
+                    console.log("Chờ tương tác tiếp theo để phát nhạc");
+                });
+            }
+        }, { once: true });
     </script>
 </body>
 </html>
